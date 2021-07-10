@@ -22,6 +22,33 @@ contract DiamondCutFacet is IDiamondCut {
         bytes calldata _calldata
     ) external override {
         LibDiamond.enforceIsContractOwner();
-        LibDiamond.diamondCut(_diamondCut, _init, _calldata);
+        LibDiamond.DiamondStorage storage ds = LibDiamond.diamondStorage();
+        uint256 originalSelectorCount = ds.selectorCount;
+        uint256 selectorCount = originalSelectorCount;
+        bytes32 selectorSlot;
+        // Check if last selector slot is not full
+        if (selectorCount & 7 > 0) {
+            // get last selectorSlot
+            selectorSlot = ds.selectorSlots[selectorCount >> 3];
+        }
+        // loop through diamond cut
+        for (uint256 facetIndex; facetIndex < _diamondCut.length; facetIndex++) {
+            (selectorCount, selectorSlot) = LibDiamond.addReplaceRemoveFacetSelectors(
+                selectorCount,
+                selectorSlot,
+                _diamondCut[facetIndex].facetAddress,
+                _diamondCut[facetIndex].action,
+                _diamondCut[facetIndex].functionSelectors
+            );
+        }
+        if (selectorCount != originalSelectorCount) {
+            ds.selectorCount = uint16(selectorCount);
+        }
+        // If last selector slot is not full
+        if (selectorCount & 7 > 0) {
+            ds.selectorSlots[selectorCount >> 3] = selectorSlot;
+        }
+        emit DiamondCut(_diamondCut, _init, _calldata);
+        LibDiamond.initializeDiamondCut(_init, _calldata);
     }
 }

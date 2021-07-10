@@ -36,7 +36,7 @@ contract Diamond {
         assembly {
             ds.slot := position
         }
-        address facet = address(bytes20(ds.facetAddressAndSelectorPosition[msg.sig].facetAddress));
+        address facet = address(bytes20(ds.facets[msg.sig]));
         require(facet != address(0), "Diamond: Function does not exist");
         assembly {
             calldatacopy(0, 0, calldatasize())
@@ -51,4 +51,6 @@ contract Diamond {
                 }
         }
     }
+
+    receive() external payable {}
 }
