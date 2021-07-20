@@ -13,12 +13,12 @@ The loupe functions are NOT gas optimized. In this implementation the `facets`, 
 
 1. Clone this repo:
 ```console
-git clone git@github.com:mudgen/diamond-1-hardhat.git
+git clone git@github.com:mudgen/diamond-2-hardhat.git
 ```
 
 2. Install NPM packages:
 ```console
-cd diamond-1-hardhat
+cd diamond-2-hardhat
 npm install
 ```
 
