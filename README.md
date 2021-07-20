@@ -28,14 +28,13 @@ npm install
 npx hardhat run scripts/deploy.js
 ```
 
-#### How the scripts/deploy.js script works
+### How the scripts/deploy.js script works
 
 1. DiamondCutFacet is deployed.
-2. The diamond is deployed, passing as arguments the owner address of the diamond and the DiamondCutFacet address. The DiamondCutFacet has the `diamondCut` external function which is used to upgrade the diamond to add more functions.
-3. The `DiamondInit` contract is deployed. This contains an `init` function which is called on the first diamond upgrade to initialize state of some state variables. Information on how the `diamondCut` function works is here: https://eips.ethereum.org/EIPS/eip-2535#diamond-interface
-4. The diamond is deployed.
-5. Facets are deployed.
-6. The diamond is upgraded. The `diamondCut` function is used to add functions from facets to the diamond. In addition the `diamondCut` function calls the `init` function from the `DiamondInit` contract using `delegatecall` to initialize state variables.
+1. The diamond is deployed, passing as arguments the owner address of the diamond and the DiamondCutFacet address. DiamondCutFacet has the `diamondCut` external function which is used to upgrade the diamond to add more functions.
+1. The `DiamondInit` contract is deployed. This contains an `init` function which is called on the first diamond upgrade to initialize state of some state variables. Information on how the `diamondCut` function works is here: https://eips.ethereum.org/EIPS/eip-2535#diamond-interface
+1. Facets are deployed.
+1. The diamond is upgraded. The `diamondCut` function is used to add functions from facets to the diamond. In addition the `diamondCut` function calls the `init` function from the `DiamondInit` contract using `delegatecall` to initialize state variables.
 
 How a diamond is deployed is not part of the EIP-2535 Diamonds standard. This implementation shows a usable example. 
 
