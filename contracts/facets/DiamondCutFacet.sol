@@ -27,8 +27,10 @@ contract DiamondCutFacet is IDiamondCut {
         uint256 selectorCount = originalSelectorCount;
         bytes32 selectorSlot;
         // Check if last selector slot is not full
+        // "selectorCount & 7" is a gas efficient modulo by eight "selectorCount % 8" 
         if (selectorCount & 7 > 0) {
             // get last selectorSlot
+            // "selectorCount >> 3" is a gas efficient division by 8 "selectorCount / 8"
             selectorSlot = ds.selectorSlots[selectorCount >> 3];
         }
         // loop through diamond cut
@@ -45,7 +47,9 @@ contract DiamondCutFacet is IDiamondCut {
             ds.selectorCount = uint16(selectorCount);
         }
         // If last selector slot is not full
+        // "selectorCount & 7" is a gas efficient modulo by eight "selectorCount % 8" 
         if (selectorCount & 7 > 0) {
+            // "selectorCount >> 3" is a gas efficient division by 8 "selectorCount / 8"
             ds.selectorSlots[selectorCount >> 3] = selectorSlot;
         }
         emit DiamondCut(_diamondCut, _init, _calldata);

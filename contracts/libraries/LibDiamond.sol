@@ -72,8 +72,10 @@ library LibDiamond {
         uint256 selectorCount = originalSelectorCount;
         bytes32 selectorSlot;
         // Check if last selector slot is not full
+        // "selectorCount & 7" is a gas efficient modulo by eight "selectorCount % 8" 
         if (selectorCount & 7 > 0) {
             // get last selectorSlot
+            // "selectorSlot >> 3" is a gas efficient division by 8 "selectorSlot / 8"
             selectorSlot = ds.selectorSlots[selectorCount >> 3];
         }
         // loop through diamond cut
@@ -90,7 +92,9 @@ library LibDiamond {
             ds.selectorCount = uint16(selectorCount);
         }
         // If last selector slot is not full
+        // "selectorCount & 7" is a gas efficient modulo by eight "selectorCount % 8" 
         if (selectorCount & 7 > 0) {
+            // "selectorSlot >> 3" is a gas efficient division by 8 "selectorSlot / 8"
             ds.selectorSlots[selectorCount >> 3] = selectorSlot;
         }
         emit DiamondCut(_diamondCut, _init, _calldata);
@@ -114,11 +118,13 @@ library LibDiamond {
                 require(address(bytes20(oldFacet)) == address(0), "LibDiamondCut: Can't add function that already exists");
                 // add facet for selector
                 ds.facets[selector] = bytes20(_newFacetAddress) | bytes32(_selectorCount);
+                // "_selectorCount & 7" is a gas efficient modulo by eight "_selectorCount % 8" 
                 uint256 selectorInSlotPosition = (_selectorCount & 7) << 5;
                 // clear selector position in slot and add selector
                 _selectorSlot = (_selectorSlot & ~(CLEAR_SELECTOR_MASK >> selectorInSlotPosition)) | (bytes32(selector) >> selectorInSlotPosition);
                 // if slot is full then write it to storage
                 if (selectorInSlotPosition == 224) {
+                    // "_selectorSlot >> 3" is a gas efficient division by 8 "_selectorSlot / 8"
                     ds.selectorSlots[_selectorCount >> 3] = _selectorSlot;
                     _selectorSlot = 0;
                 }
@@ -139,7 +145,9 @@ library LibDiamond {
             }
         } else if (_action == IDiamondCut.FacetCutAction.Remove) {
             require(_newFacetAddress == address(0), "LibDiamondCut: Remove facet address must be address(0)");
+            // "_selectorCount >> 3" is a gas efficient division by 8 "_selectorCount / 8"
             uint256 selectorSlotCount = _selectorCount >> 3;
+            // "_selectorCount & 7" is a gas efficient modulo by eight "_selectorCount % 8" 
             uint256 selectorInSlotIndex = _selectorCount & 7;
             for (uint256 selectorIndex; selectorIndex < _selectors.length; selectorIndex++) {
                 if (_selectorSlot == 0) {
@@ -169,7 +177,9 @@ library LibDiamond {
                     }
                     delete ds.facets[selector];
                     uint256 oldSelectorCount = uint16(uint256(oldFacet));
+                    // "oldSelectorCount >> 3" is a gas efficient division by 8 "oldSelectorCount / 8"
                     oldSelectorsSlotCount = oldSelectorCount >> 3;
+                    // "oldSelectorCount & 7" is a gas efficient modulo by eight "oldSelectorCount % 8" 
                     oldSelectorInSlotPosition = (oldSelectorCount & 7) << 5;
                 }
                 if (oldSelectorsSlotCount != selectorSlotCount) {
