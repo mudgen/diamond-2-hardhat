@@ -48,7 +48,6 @@ contract DiamondLoupeFacet is IDiamondLoupe, IERC165 {
                     }
                 }
                 if (continueLoop) {
-                    continueLoop = false;
                     continue;
                 }
                 facets_[numFacets].facetAddress = facetAddress_;
