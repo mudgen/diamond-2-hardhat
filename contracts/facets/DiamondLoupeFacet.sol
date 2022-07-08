@@ -37,6 +37,7 @@ contract DiamondLoupeFacet is IDiamondLoupe, IERC165 {
                 if (selectorIndex > ds.selectorCount) {
                     break;
                 }
+                // " << 5 is the same as multiplying by 32 ( * 32)
                 bytes4 selector = bytes4(slot << (selectorSlotIndex << 5));
                 address facetAddress_ = address(bytes20(ds.facets[selector]));
                 bool continueLoop;
@@ -90,6 +91,7 @@ contract DiamondLoupeFacet is IDiamondLoupe, IERC165 {
                 if (selectorIndex > ds.selectorCount) {
                     break;
                 }
+                // " << 5 is the same as multiplying by 32 ( * 32)
                 bytes4 selector = bytes4(slot << (selectorSlotIndex << 5));
                 address facet = address(bytes20(ds.facets[selector]));
                 if (_facet == facet) {
@@ -119,6 +121,7 @@ contract DiamondLoupeFacet is IDiamondLoupe, IERC165 {
                 if (selectorIndex > ds.selectorCount) {
                     break;
                 }
+                // " << 5 is the same as multiplying by 32 ( * 32)
                 bytes4 selector = bytes4(slot << (selectorSlotIndex << 5));
                 address facetAddress_ = address(bytes20(ds.facets[selector]));
                 bool continueLoop;

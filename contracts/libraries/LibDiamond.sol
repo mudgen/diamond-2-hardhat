@@ -122,6 +122,7 @@ library LibDiamond {
                 // add facet for selector
                 ds.facets[selector] = bytes20(_newFacetAddress) | bytes32(_selectorCount);
                 // "_selectorCount & 7" is a gas efficient modulo by eight "_selectorCount % 8" 
+                // " << 5 is the same as multiplying by 32 ( * 32)
                 uint256 selectorInSlotPosition = (_selectorCount & 7) << 5;
                 // clear selector position in slot and add selector
                 _selectorSlot = (_selectorSlot & ~(CLEAR_SELECTOR_MASK >> selectorInSlotPosition)) | (bytes32(selector) >> selectorInSlotPosition);
@@ -173,6 +174,7 @@ library LibDiamond {
                     require(address(bytes20(oldFacet)) != address(this), "LibDiamondCut: Can't remove immutable function");
                     // replace selector with last selector in ds.facets
                     // gets the last selector
+                    // " << 5 is the same as multiplying by 32 ( * 32)
                     lastSelector = bytes4(_selectorSlot << (selectorInSlotIndex << 5));
                     if (lastSelector != selector) {
                         // update last selector slot position info
@@ -183,6 +185,7 @@ library LibDiamond {
                     // "oldSelectorCount >> 3" is a gas efficient division by 8 "oldSelectorCount / 8"
                     oldSelectorsSlotCount = oldSelectorCount >> 3;
                     // "oldSelectorCount & 7" is a gas efficient modulo by eight "oldSelectorCount % 8" 
+                    // " << 5 is the same as multiplying by 32 ( * 32)
                     oldSelectorInSlotPosition = (oldSelectorCount & 7) << 5;
                 }
                 if (oldSelectorsSlotCount != selectorSlotCount) {
