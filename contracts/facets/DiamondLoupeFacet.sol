@@ -26,7 +26,7 @@ contract DiamondLoupeFacet is IDiamondLoupe, IERC165 {
     function facets() external override view returns (Facet[] memory facets_) {
         LibDiamond.DiamondStorage storage ds = LibDiamond.diamondStorage();
         facets_ = new Facet[](ds.selectorCount);
-        uint8[] memory numFacetSelectors = new uint8[](ds.selectorCount);
+        uint16[] memory numFacetSelectors = new uint16[](ds.selectorCount);
         uint256 numFacets;
         uint256 selectorIndex;
         // loop through function selectors
