@@ -37,7 +37,7 @@ contract DiamondCutFacet is IDiamondCut {
             selectorSlot = ds.selectorSlots[selectorCount >> 3];
         }
         // loop through diamond cut
-        for (uint256 facetIndex; facetIndex < _diamondCut.length; facetIndex++) {
+        for (uint256 facetIndex; facetIndex < _diamondCut.length; ) {
             (selectorCount, selectorSlot) = LibDiamond.addReplaceRemoveFacetSelectors(
                 selectorCount,
                 selectorSlot,
@@ -45,6 +45,10 @@ contract DiamondCutFacet is IDiamondCut {
                 _diamondCut[facetIndex].action,
                 _diamondCut[facetIndex].functionSelectors
             );
+
+            unchecked {
+                facetIndex++;
+            }
         }
         if (selectorCount != originalSelectorCount) {
             ds.selectorCount = uint16(selectorCount);
