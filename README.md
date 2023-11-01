@@ -11,7 +11,14 @@ Specifically this is a gas efficient implementation of the `diamondCut` function
 The loupe functions are NOT gas optimized. In this implementation the `facets`, `facetFunctionSelectors`, `facetAddresses` loupe functions are not meant to be called on-chain and may use too much gas or run out of gas when called in on-chain transactions. In this implementation these functions should be called by off-chain software like websites and Javascript libraries etc., where gas costs do not matter.
 
 
-## Installation
+## Installation with npm
+
+```console
+npm i -g solidity-framework
+sol
+```
+
+## Installation with git
 
 1. Clone this repo:
 ```console
