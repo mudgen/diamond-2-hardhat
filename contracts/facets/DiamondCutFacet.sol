@@ -25,12 +25,12 @@ contract DiamondCutFacet is IDiamondCut {
         bytes calldata _calldata
     ) external override {
         LibDiamond.enforceIsContractOwner();
-        LibDiamond.DiamondStorage storage ds = LibDiamond.diamondStorage();
+        LibDiamond.DiamondStorage storage ds = LibDiamond.Storage();
         uint256 originalSelectorCount = ds.selectorCount;
         uint256 selectorCount = originalSelectorCount;
         bytes32 selectorSlot;
         // Check if last selector slot is not full
-        // "selectorCount & 7" is a gas efficient modulo by eight "selectorCount % 8" 
+        // "selectorCount & 7" is a gas efficient modulo by eight "selectorCount % 8"
         if (selectorCount & 7 > 0) {
             // get last selectorSlot
             // "selectorCount >> 3" is a gas efficient division by 8 "selectorCount / 8"
@@ -54,7 +54,7 @@ contract DiamondCutFacet is IDiamondCut {
             ds.selectorCount = uint16(selectorCount);
         }
         // If last selector slot is not full
-        // "selectorCount & 7" is a gas efficient modulo by eight "selectorCount % 8" 
+        // "selectorCount & 7" is a gas efficient modulo by eight "selectorCount % 8"
         if (selectorCount & 7 > 0) {
             // "selectorCount >> 3" is a gas efficient division by 8 "selectorCount / 8"
             ds.selectorSlots[selectorCount >> 3] = selectorSlot;
