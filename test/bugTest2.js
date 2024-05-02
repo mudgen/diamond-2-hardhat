@@ -19,7 +19,7 @@ const { assert } = require('chai')
 // And `rand8` is lost from the selector tracking
 // The bug is in LibDiamond.sol line 171
 describe('Cache bug test', async () => {
-``
+
   it('Should not revert with missing selector if removal of payable selector @ selectorCount % 8', async () => {
     let diamondAddress = await deployDiamond()
     let diamondCutFacet = await ethers.getContractAt('DiamondCutFacet', diamondAddress)
@@ -44,8 +44,7 @@ describe('Cache bug test', async () => {
       selectors.push(ethers.utils.hexlify(ethers.utils.randomBytes(4)));
     }
 
-    console.log(selectors)
-
+    // Push the selector into a new row
     selectors.push(payableSelector);
 
 
@@ -70,20 +69,10 @@ describe('Cache bug test', async () => {
     receipt = await tx.wait();
 
 
-    console.log(await diamondLoupeFacet.facetFunctionSelectors(test1Facet.address));
-    console.log(selectors.filter((x) => x != payableSelector));
     assert.deepEqual(
       await diamondLoupeFacet.facetFunctionSelectors(test1Facet.address),
       selectors.filter((x) => x != payableSelector)
     );
 
-    // expect(
-    //   (await diamondLoupeFacet.facetFunctionSelectors(test1Facet.address)).length,
-    //   'missing selector',
-    // ).to.eq(selectors.filter((x) => x != payableSelector).length);
-
-    // expect(
-    //   await diamondLoupeFacet.facetFunctionSelectors(test1Facet.address),
-    // ).not.include(payableSelector);
   });
 })
