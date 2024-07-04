@@ -168,7 +168,7 @@ library LibDiamond {
             // "_selectorCount & 7" is a gas efficient modulo by eight "_selectorCount % 8" 
             uint256 selectorInSlotIndex = _selectorCount & 7;
             for (uint256 selectorIndex; selectorIndex < _selectors.length; ) {
-                if (selectorInSlotIndex == 0) {
+                if (_selectorSlot == 0) {
                     // get last selectorSlot
                     selectorSlotCount--;
                     _selectorSlot = ds.selectorSlots[selectorSlotCount];
