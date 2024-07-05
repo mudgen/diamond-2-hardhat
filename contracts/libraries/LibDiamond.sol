@@ -168,15 +168,13 @@ library LibDiamond {
             // "_selectorCount & 7" is a gas efficient modulo by eight "_selectorCount % 8" 
             uint256 selectorInSlotIndex = _selectorCount & 7;
             for (uint256 selectorIndex; selectorIndex < _selectors.length; ) {
-                // selectorSlot for 0x00000000 selector == 0
-                // We also need the below to trigger for 0x00000000 selector when selectorInSlotIndex !=0
-                if (_selectorSlot != 0 || (selectorInSlotIndex != 0 && _selectors[selectorIndex] == 0)) {
-                    selectorInSlotIndex--;
-                } else {
+                if (selectorInSlotIndex == 0) {
                     // get last selectorSlot
                     selectorSlotCount--;
                     _selectorSlot = ds.selectorSlots[selectorSlotCount];
                     selectorInSlotIndex = 7;
+                } else {
+                    selectorInSlotIndex--;
                 }
                 bytes4 lastSelector;
                 uint256 oldSelectorsSlotCount;
